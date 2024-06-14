@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -17,7 +16,7 @@ import { validate as uuidValidate } from 'uuid';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   async create(@Body() data: CreateUserDTO) {
@@ -37,16 +36,20 @@ export class UserController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() body: UpdatePutUserDTO) {
-    return { method: 'put', id, body };
+  async update(@Param('id') id: string, @Body() data: UpdatePutUserDTO) {
+    const isValidUUID = uuidValidate(id);
+    if (!isValidUUID) throw new Error('Invalid UUID format');
+    return this.userService.update(id, data);
   }
 
   @Patch(':id')
   async updatePartial(
     @Param('id') id: string,
-    @Body() body: UpdatePatchUserDTO,
+    @Body() data: UpdatePatchUserDTO,
   ) {
-    return { method: 'patch', id, body };
+    const isValidUUID = uuidValidate(id);
+    if (!isValidUUID) throw new Error('Invalid UUID format');
+    return this.userService.updatePartial(id, data);
   }
 
   @Delete(':id')
