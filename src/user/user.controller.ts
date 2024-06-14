@@ -13,10 +13,11 @@ import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
+import { validate as uuidValidate } from 'uuid';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   async create(@Body() data: CreateUserDTO) {
@@ -25,12 +26,14 @@ export class UserController {
 
   @Get()
   async getAll() {
-    return { users: [] };
+    return this.userService.getAll();
   }
 
   @Get(':id')
-  async getById(@Param('id', ParseIntPipe) id: number) {
-    return { user: {}, id };
+  async getById(@Param('id') id) {
+    const isValidUUID = uuidValidate(id);
+    if (!isValidUUID) throw new Error('Invalid UUID format');
+    return this.userService.getById(id);
   }
 
   @Put(':id')
