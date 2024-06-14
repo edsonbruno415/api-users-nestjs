@@ -30,30 +30,27 @@ export class UserController {
   }
 
   @Get(':id')
-  async getById(@Param('id') id) {
+  async getById(@Param('id') id: string) {
     const isValidUUID = uuidValidate(id);
     if (!isValidUUID) throw new Error('Invalid UUID format');
     return this.userService.getById(id);
   }
 
   @Put(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() body: UpdatePutUserDTO,
-  ) {
+  async update(@Param('id') id: string, @Body() body: UpdatePutUserDTO) {
     return { method: 'put', id, body };
   }
 
   @Patch(':id')
   async updatePartial(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() body: UpdatePatchUserDTO,
   ) {
     return { method: 'patch', id, body };
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id') id: string) {
     return { method: 'delete', id };
   }
 }
