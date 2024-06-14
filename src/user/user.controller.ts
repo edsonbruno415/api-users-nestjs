@@ -9,16 +9,18 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateUserDTO } from 'src/dto/create-user.dto';
-import { UpdatePatchUserDTO } from 'src/dto/update-patch-user.dto';
-import { UpdatePutUserDTO } from 'src/dto/update-put-user.dto';
+import { UserService } from './user.service';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdatePutUserDTO } from './dto/update-put-user.dto';
+import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 
 @Controller('users')
 export class UserController {
+  constructor(private readonly userService: UserService) {}
+
   @Post()
-  async create(@Body() body: CreateUserDTO) {
-    const { name, email, password } = body;
-    return { name, email, password };
+  async create(@Body() data: CreateUserDTO) {
+    return this.userService.create(data);
   }
 
   @Get()
