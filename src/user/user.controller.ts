@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
@@ -23,14 +23,14 @@ export class UserController {
   @Get(':id')
   async getById(@Param('id') id: string) {
     const isValidUUID = uuidValidate(id);
-    if (!isValidUUID) throw new Error('Invalid UUID format');
+    if (!isValidUUID) throw new BadRequestException('Invalid UUID format');
     return this.userService.getById(id);
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() data: UpdatePutUserDTO) {
     const isValidUUID = uuidValidate(id);
-    if (!isValidUUID) throw new Error('Invalid UUID format');
+    if (!isValidUUID) throw new BadRequestException('Invalid UUID format');
     data.birthAt = data.birthAt ? new Date(data.birthAt).toISOString() : null;
     return this.userService.update(id, data);
   }
@@ -38,7 +38,7 @@ export class UserController {
   @Patch(':id')
   async updatePartial(@Param('id') id: string, @Body() data: UpdatePatchUserDTO) {
     const isValidUUID = uuidValidate(id);
-    if (!isValidUUID) throw new Error('Invalid UUID format');
+    if (!isValidUUID) throw new BadRequestException('Invalid UUID format');
     if (data.birthAt) data.birthAt = new Date(data.birthAt).toISOString();
     return this.userService.updatePartial(id, data);
   }
@@ -46,7 +46,7 @@ export class UserController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     const isValidUUID = uuidValidate(id);
-    if (!isValidUUID) throw new Error('Invalid UUID format');
+    if (!isValidUUID) throw new BadRequestException('Invalid UUID format');
     return this.userService.remove(id);
   }
 }
