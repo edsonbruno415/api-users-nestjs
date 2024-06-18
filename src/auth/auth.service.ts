@@ -32,7 +32,7 @@ export class AuthService {
     };
   }
 
-  async checkToken(token: string) {
+  checkToken(token: string) {
     try {
       const credentials = this.jwtService.verify(token, {
         audience: this.audience,
@@ -45,7 +45,7 @@ export class AuthService {
     }
   }
 
-  async isValidToken(token: string) {
+  isValidToken(token: string) {
     try {
       this.checkToken(token);
       return true;
