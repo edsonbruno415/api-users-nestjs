@@ -91,8 +91,8 @@ export class AuthService {
   }
 
   async reset(password: string, token: string) {
-    // TODO: validar token e alterar a senha do usuario
-    const id = 'uuid';
+    const credentials = this.checkToken(token);
+    const id = credentials.sub;
 
     const user = await this.prisma.user.update({
       where: {
