@@ -8,7 +8,7 @@ import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create({ name, email, password, birthAt }: CreateUserDTO) {
+  async create({ name, email, password, birthAt, role }: CreateUserDTO) {
     return this.prisma.user.create({
       data: {
         id: crypto.randomUUID(),
@@ -16,6 +16,7 @@ export class UserService {
         email,
         password,
         birthAt,
+        role,
       },
     });
   }
@@ -32,7 +33,7 @@ export class UserService {
     });
   }
 
-  async update(id: string, { name, email, password, birthAt }: UpdatePutUserDTO) {
+  async update(id: string, { name, email, password, birthAt, role }: UpdatePutUserDTO) {
     await this.exists(id);
     return this.prisma.user.update({
       where: {
@@ -43,6 +44,7 @@ export class UserService {
         email,
         password,
         birthAt,
+        role,
       },
     });
   }
