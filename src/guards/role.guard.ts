@@ -7,7 +7,7 @@ import { Role } from 'src/enums/role.enum';
 export class RoleGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
 
     if (!requiredRoles) {
@@ -16,8 +16,6 @@ export class RoleGuard implements CanActivate {
 
     const { user } = context.switchToHttp().getRequest();
     const rolesFiltred = requiredRoles.filter((role) => role === user.role);
-
-    console.log({ rolesFiltred });
 
     return rolesFiltred.length > 0;
   }
